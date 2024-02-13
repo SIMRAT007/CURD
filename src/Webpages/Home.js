@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <>
     <div className='bg-yellow-500'>
-    {/* <Signup/> */}
+    <Signup/>
     </div>
     
     <div className='bg-red-500'>
@@ -15,7 +15,7 @@ const Home = () => {
     </div>
 
     <div className='bg-green-500'>
-   {/* <Proofs/> */}
+   <Proofs/>
     </div>
 
     </>

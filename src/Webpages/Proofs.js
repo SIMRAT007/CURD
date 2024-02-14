@@ -16,6 +16,7 @@ const Proofs = () => {
     const querySnapshot = await getDocs(userQuery);
     if (querySnapshot.empty) {
       setError('Invalid email or number');
+      alert('Invalid email or number, Please enter valid ids')
       return;
     }
   
@@ -32,14 +33,18 @@ const Proofs = () => {
         const userRef = doc(db, 'users', userId);
         updateDoc(userRef, { imageUrl: url }).then(() => {
           console.log('Image URL linked to user ID successfully');
+          alert("Image is uploaded successfully");
+          
         }).catch((error) => {
           console.error('Error linking image URL to user ID:', error);
+          alert('Error linking image URL to user ID:', error);
         });
       }).catch((error) => {
         console.error('Error getting download URL:', error);
       });
     }).catch((error) => {
       console.error('Error uploading file:', error);
+      alert('Error uploading file:')
     });
   };
 
@@ -48,22 +53,23 @@ const Proofs = () => {
   };
 
   return (
-    <div>
-      <h2>Upload Image</h2>
+    <div className=' border-2  p-2'>
+      <h2 className='text-center border-b pb-1 mb-3'>Upload Payment Proof</h2>
       <div>
-        <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className='bg-gray-700 w-full mb-1 p-1' />
       </div>
       <div>
-        <input type="text" placeholder="Number" value={number} onChange={(e) => setNumber(e.target.value)} />
+        <input type="text" placeholder="Number" value={number} onChange={(e) => setNumber(e.target.value)} className='bg-gray-700 w-full mb-1 p-1' />
       </div>
-      <div>
+      <div className='text-center'>
         <input type="file" accept="image/*" onChange={handleImageChange} />
       </div>
       <div>
-        <button onClick={handleUpload}>Upload Image</button>
+        <button onClick={handleUpload} className='bg-green-600 mt-2 ml-2 px-5 rounded text-white '>Upload</button>
+        {/* <p>{error}</p> */}
       </div>
-      {error && <p>{error}</p>}
-      {imageUrl && <img src={imageUrl} alt="Uploaded Image" style={{ maxWidth: '200px' }} />}
+      {/* {error && <p>{error}</p>}
+      {imageUrl && <img src={imageUrl} alt="Uploaded Image" style={{ maxWidth: '200px' }} />} */}
     </div>
   );
 };

@@ -45,20 +45,20 @@ const Banner = () => {
   };
 
   return (
-    <div>
-      <h2>Banner</h2>
+    <div className='p-5'>
+      <h2 className='text-white text-xl text-center pb-5 border-b'>UPLOAD BANNER</h2>
       <input
         id="fileInput"
         type="file"
         accept="image/*"
         style={{ display: 'none' }}
-        onChange={handleImageUpload}
+        onChange={handleImageUpload} 
       />
-      <button onClick={handleUpdateImage}>Update Image</button>
+      <button onClick={handleUpdateImage} className='text-gray-800 bg-white mt-5 block m-auto px-3 py-2 rounded-full'>Update Image</button>
       {imageUrl && (
         <div>
-          <h3>Latest Uploaded Image</h3>
-          <img src={imageUrl} alt="Latest Uploaded Image" style={{ maxWidth: '200px' }} />
+          <h3 className='text-center mt-5 mb-5 text-white uppercase'>Latest Uploaded Banner </h3>
+          <img src={imageUrl} alt="Latest Uploaded Image" className='w-full' />
         </div>
       )}
     </div>

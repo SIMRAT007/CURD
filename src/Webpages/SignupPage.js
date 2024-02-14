@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { collection, addDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase-config'; // Import Firebase auth and firestore instance
+import { signOut } from 'firebase/auth';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -25,6 +26,10 @@ const Signup = () => {
       setError('');
       // Redirect to dashboard or another page upon successful signup
       // You can use React Router for navigation
+alert('SIGNIN SUCCESSFULLY, PLEASE LOGIN NOW !')
+      await signOut(auth);
+
+      
     } catch (error) {
       setError(error.message);
     }
@@ -32,51 +37,55 @@ const Signup = () => {
 
   return (
     <div>
-      <h2>Signup</h2>
-      <form onSubmit={handleSignup}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="number">Number</label>
-          <input
-            type="text"
-            id="number"
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Signup</button>
-        {error && <p>{error}</p>}
-      </form>
+      <form onSubmit={handleSignup} className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+  <div className="mb-4">
+    <label htmlFor="email" className="block text-gray-700 font-bold mb-2">Email</label>
+    <input
+      type="email"
+      id="email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      required
+      className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    />
+  </div>
+  <div className="mb-4">
+    <label htmlFor="password" className="block text-gray-700 font-bold mb-2">Password</label>
+    <input
+      type="password"
+      id="password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      required
+      className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    />
+  </div>
+  <div className="mb-4">
+    <label htmlFor="name" className="block text-gray-700 font-bold mb-2">Name</label>
+    <input
+      type="text"
+      id="name"
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+      required
+      className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    />
+  </div>
+  <div className="mb-4">
+    <label htmlFor="number" className="block text-gray-700 font-bold mb-2">Number</label>
+    <input
+      type="text"
+      id="number"
+      value={number}
+      onChange={(e) => setNumber(e.target.value)}
+      required
+      className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    />
+  </div>
+  <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Signup</button>
+  {error && <p className="text-red-500 mt-2">{error}</p>}
+</form>
+
     </div>
   );
 };

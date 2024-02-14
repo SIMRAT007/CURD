@@ -4,7 +4,12 @@ import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../firebase-config'; // Adjust the path accordingly
 
-const Login = () => {
+{/* HOME SCREEN  */}
+{/* <iframe src='https://goldbox247.com/#/home' className=' absolute top-0 w-full h-[100%]'>
+
+</iframe> */}
+
+const Login = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userDetails, setUserDetails] = useState(null);
@@ -50,33 +55,46 @@ const Login = () => {
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      await signOut(auth);
-      // Check if a user is already logged in
-      const currentUser = auth.currentUser;
-      if (currentUser) {
-        // Prompt the user to log out before logging in again
-        setError('Another user is already logged in. Please log out before logging in again.');
-        return;
-      }
-  
-      // Sign in user with email and password
-      await signInWithEmailAndPassword(auth, email, password);
-      console.log('Login successful');
-  
-      // Fetch user details from Firestore
-      fetchUserDetails(email);
-  
-      // Reset email and password fields and clear error
-      setEmail('');
-      setPassword('');
-      setError('');
-    } catch (error) {
-      setError(error.message);
-      console.error('Login error:', error);
+  e.preventDefault();
+  try {
+    // Check if a user is already logged in
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      // Prompt the user to log out before logging in again
+      setError('Another user is already logged in. Please log out before logging in again.');
+      return;
     }
-  };
+
+    // Sign in user with email and password
+    await signInWithEmailAndPassword(auth, email, password);
+    console.log('Login successful');
+    alert("LOGIN SUCCESSFULL");
+
+    // Fetch user details from Firestore
+    const userQuery = query(collection(db, 'users'), where('email', '==', email));
+    const querySnapshot = await getDocs(userQuery);
+    if (!querySnapshot.empty) {
+      const userData = querySnapshot.docs[0].data();
+      setUserDetails(userData);
+
+      // Invoke onSuccess callback after successful login
+    onSuccess(userData);
+    } else {
+      console.log('User not found in database');
+    }
+ // Fetch user data here
+
+    // Reset email and password fields and clear error
+    setEmail('');
+    setPassword('');
+    setError('');
+
+    
+  } catch (error) {
+    setError(error.message);
+    console.error('Login error:', error);
+  }
+};
 
   const handleLogout = async () => {
     try {
@@ -92,31 +110,36 @@ const Login = () => {
 
   return (
     <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-      <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
-        {error && <p>{error}</p>}
-      </form>
+      <form onSubmit={handleLogin} className="max-w-md mx-auto bg-white p-8 rounded-md shadow-md">
+  <div className="mb-4">
+    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+    <input
+      type="email"
+      id="email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      required
+      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+    />
+  </div>
+  <div className="mb-4">
+    <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+    <input
+      type="password"
+      id="password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      required
+      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+    />
+  </div>
+  <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50">Login</button>
+  {error && <p className="mt-2 text-red-600">{error}
+  </p>}
+
+  {/* <button onClick={handleLogout}>Logout</button> */}
+</form>
+
       {userDetails && (
         <div>
           <h3>User Details</h3>
@@ -129,7 +152,7 @@ const Login = () => {
           <button onClick={handleLogout}>Logout</button>
         </div>
       )}
-      {error && <p>{error}</p>}
+      {/* {error && <p>{error}</p>} */}
     </div>
   );
 };
